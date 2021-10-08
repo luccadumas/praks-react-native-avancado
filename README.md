@@ -1,1 +1,0 @@
-# praks-react-native-avancado
