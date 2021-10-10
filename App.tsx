@@ -3,9 +3,10 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function App() {
-  const getUser = async () => {
+  const handlerRequest = async () => {
+    // GET
     try {
-      const response = await fetch("https://api.github.com/users/luccadumas", {
+      const response = await fetch(`https://reqbin.com/echo/get/json`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -13,52 +14,52 @@ export default function App() {
         },
       });
       const json = await response.json();
+      console.log(`----- START GET -----`)
       console.log(json);
+      console.log(`----- END GET -----\n\n`)
     } catch (error) {
       console.error(error);
     }
   };
 
-  const postUser = async () => {
+  const handlerRequestWithParam = async (method: string) => {
+    // POST, PUT, PATCH, DELETE
     try {
-      const response = await fetch("", {
-        method: "POST",
+      const response = await fetch(`https://reqbin.com/echo/${method.toLowerCase()}/json`, {
+        method: method,
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          firstParam: "",
-          secondParam: "",
+          course: "praks",
+          level: "advanced",
         }),
       });
       const json = await response.json();
+      console.log(`----- START ${method} -----`)
       console.log(json);
+      console.log(`----- END ${method} -----\n\n`)
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handlerPut = async () => {
-    console.log("PUT");
-  };
-
-  const handlerDelete = async () => {
-    console.log("DELETE");
-  };
-
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => getUser()}>
+      <TouchableOpacity style={styles.button} onPress={() => handlerRequest()}>
         <Text style={styles.buttonText}>GET</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => postUser()}>
+      <TouchableOpacity style={styles.button} onPress={() => handlerRequestWithParam("POST")}>
         <Text style={styles.buttonText}>POST</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => handlerPut()}>
+      <TouchableOpacity style={styles.button} onPress={() => handlerRequestWithParam("PUT")}>
         <Text style={styles.buttonText}>PUT</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => handlerDelete()}>
+      <TouchableOpacity style={styles.button} onPress={() => handlerRequestWithParam("PATCH")}>
+        <Text style={styles.buttonText}>PATCH</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => handlerRequestWithParam("DELETE")}>
         <Text style={styles.buttonText}>DELETE</Text>
       </TouchableOpacity>
       <StatusBar style="auto" />
