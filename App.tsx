@@ -1,45 +1,69 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
+import {api} from "./src/services/api";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function App() {
+  const body = JSON.stringify({
+    course: "praks",
+    level: "advanced",
+  })
+  
   const handlerRequest = async () => {
     // GET
     try {
-      const response = await fetch(`https://reqbin.com/echo/get/json`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-      const json = await response.json();
+      const response = (await api.get("/get/json")).data
       console.log(`----- START GET -----`)
-      console.log(json);
+      console.log(response);
       console.log(`----- END GET -----\n\n`)
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handlerRequestWithParam = async (method: string) => {
-    // POST, PUT, PATCH, DELETE
+  const handlerRequestPost = async()=> {
+    // POST
     try {
-      const response = await fetch(`https://reqbin.com/echo/${method.toLowerCase()}/json`, {
-        method: method,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          course: "praks",
-          level: "advanced",
-        }),
-      });
-      const json = await response.json();
-      console.log(`----- START ${method} -----`)
-      console.log(json);
-      console.log(`----- END ${method} -----\n\n`)
+      const response = await (await api.post("/post/json", body)).data;
+      console.log(`----- START POST -----`)
+      console.log(response);
+      console.log(`----- END POST -----\n\n`)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handlerRequestPut = async()=> {
+    // PUT
+    try {
+      const response = await (await api.put("/put/json", body)).data;
+      console.log(`----- START PUT -----`)
+      console.log(response);
+      console.log(`----- END PUT -----\n\n`)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handlerRequestPatch = async()=> {
+    // PATCH
+    try {
+      const response = await (await api.patch("/patch/json", body)).data;
+      console.log(`----- START PATCH -----`)
+      console.log(response);
+      console.log(`----- END PATCH -----\n\n`)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handlerRequestDelete = async()=> {
+    // DELETE
+    try {
+      const response = await (await api.delete("/delete/json")).data;
+      console.log(`----- START DELETE -----`)
+      console.log(response);
+      console.log(`----- END DELETE -----\n\n`)
     } catch (error) {
       console.error(error);
     }
@@ -50,16 +74,16 @@ export default function App() {
       <TouchableOpacity style={styles.button} onPress={() => handlerRequest()}>
         <Text style={styles.buttonText}>GET</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => handlerRequestWithParam("POST")}>
+      <TouchableOpacity style={styles.button} onPress={() => handlerRequestPost()}>
         <Text style={styles.buttonText}>POST</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => handlerRequestWithParam("PUT")}>
+      <TouchableOpacity style={styles.button} onPress={() => handlerRequestPut()}>
         <Text style={styles.buttonText}>PUT</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => handlerRequestWithParam("PATCH")}>
+      <TouchableOpacity style={styles.button} onPress={() => handlerRequestPatch()}>
         <Text style={styles.buttonText}>PATCH</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => handlerRequestWithParam("DELETE")}>
+      <TouchableOpacity style={styles.button} onPress={() => handlerRequestDelete()}>
         <Text style={styles.buttonText}>DELETE</Text>
       </TouchableOpacity>
       <StatusBar style="auto" />
